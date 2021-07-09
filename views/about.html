@@ -1,0 +1,40 @@
+<!doctype html>
+<html>
+
+<head>
+    <title>
+        <%= appTitle %>
+    </title>
+</head>
+
+<body>
+    <h1>
+        <%= appName %>
+    </h1>
+
+    <!-- R2A: Display information about the web application including your name as the developer.
+        Display a link to the home page or a navigation bar that contains links to other pages.-->
+    <nav>
+        <ul>
+            <li><a href="/">TOP</a></li>
+            <li><a href="/about">ABOUT</a></li>
+            <li><a href="/add-device">ADD DEVICE</a></li>
+            <li><a href="/device-status"> DEVICE STATUS</a></li>
+            <li><a href="/update-device"> UPDATE DEVICE</a></li>
+            <li><a href="/delete-device"> DELETE STATUS</a></li>
+        </ul>
+    </nav>
+
+    Developer: Akira Sakaguchi (as1112@student.london.ac.uk)
+
+    About this app: <%= appName %> is a dynamic web application that functions as a dashboard to help you to control
+        devices in their smart home.
+        It interacts with you to provide information related to the status of devices at home such as:
+        - cooling and heating systems
+        - curtains and blinds
+        - lighting, security
+        - audiovisual systems such as TV, radio, music players,
+        - kitchen appliances such as fridge-freezer, hob, oven, microwave, etc.
+</body>
+
+</html>

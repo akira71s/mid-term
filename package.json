@@ -1,0 +1,25 @@
+{
+  "name": "midterm",
+  "version": "1.0.0",
+  "description": "��#\u0000 \u0000m\u0000i\u0000d\u0000t\u0000e\u0000r\u0000m\u0000\r\u0000 \u0000",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/akiras7171/midterm.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/akiras7171/midterm/issues"
+  },
+  "homepage": "https://github.com/akiras7171/midterm#readme",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "ejs": "^3.1.6",
+    "express": "^4.17.1",
+    "mysql": "^2.18.1"
+  }
+}
