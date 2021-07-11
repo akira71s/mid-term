@@ -6,29 +6,27 @@
 <html>
 
 <head>
-    <title>
-        <%= appTitle %>
-    </title>
+    <title><%= appName %></title>
 </head>
 
 <body>
-    <h1>
-        <%= appName %>
-    </h1>
-    <!-- R1B: Display links to other pages or a navigation bar that contains links to other pages.-->
-    <nav>
-        <ul>
-            <li><a href="/">TOP</a></li>
-            <li><a href="/about">ABOUT</a></li>
-            <li><a href="/add-device">ADD DEVICE</a></li>
-            <li><a href="/device-status"> DEVICE STATUS</a></li>
-            <li><a href="/update-device"> UPDATE DEVICE</a></li>
-            <li><a href="/delete-device"> DELETE STATUS</a></li>
-        </ul>
-    </nav>
+        <!-- R1A: Display the name of the web application.-->
+        <h1><%= appName %></h1>
+        <!-- R1B: Display links to other pages or a navigation bar that contains links to other pages.-->
+        <nav>
+            <ul>
+                <li><a href="/">TOP</a></li>
+                <li><a href="/about">ABOUT</a></li>
+                <li><a href="/add-device">ADD DEVICE</a></li>
+                <li><a href="/device-status"> DEVICE STATUS</a></li>
+                <li><a href="/select-device-to-update"> UPDATE DEVICE</a></li>
+                <li><a href="/delete-device"> DELETE DEVICE</a></li>
+            </ul>
+        </nav>
 
-    <p>Homepage This is an example paragraph. Anything in the <strong>body</strong> tag will appear on the page, just
-        like this <strong>p</strong> tag and its contents.</p>
-</body>
+        <h2>TOP</h2>
 
+        <p>This web application helps you with register, delete and change settings for your smart devices. </p>
+        <p>You can manages tvs, cars, smart speaker and more! </p>
+    </body>
 </html>

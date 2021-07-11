@@ -1,0 +1,82 @@
+<!doctype html>
+<html>
+    <head>
+        <title><%= appName %></title>
+    </head>
+
+    <body>
+        <h1><%= appName %></h1>
+        <!-- R4A: Display a link to the home page or a navigation bar that contains links to other pages.-->
+        <nav>
+            <ul>
+                <li><a href="/">TOP</a></li>
+                <li><a href="/about">ABOUT</a></li>
+                <li><a href="/add-device">ADD DEVICE</a></li>
+                <li><a href="/device-status"> DEVICE STATUS</a></li>
+                <li><a href="/select-device-to-update"> UPDATE DEVICE</a></li>
+                <li><a href="/delete-device"> DELETE DEVICE</a></li>
+            </ul>
+        </nav>
+
+        <h2>Device Status</h2>
+
+        <!--R4A  Display a list of already added devices and then let the user choose a device from the list-->
+        <table border="1px solid;">
+            <tr style="background-color: lightgrey;">
+                <th>Device ID</th>
+                <th>Device Name</th>
+                <th>Device Type</th>
+                <th>Temperature</th>
+                <th>Volume</th>
+                <th>Open/Closed</th>
+                <th>On/Off</th>
+            </tr>
+            <% var count = 0%>
+            <% devices.forEach(function(device){ %>
+                <% count++ %>
+                <tr>
+                <!--Id Column-->
+                <td><b><%= device.id %></b></td>
+                <!--DeviceName Column-->
+                <td><b><%= device.deviceName %></b></td>
+                <!--DeviceType Column-->
+                <td><b><%= device.deviceType %></b></td>
+                <!--Temperature Column-->
+                <% if(device.temperature !=null){ %>
+                <td><b><%= device.temperature %></b></td>
+                <% } else {%>
+                <td>N/A</td>
+                <% }%>
+                <!--Volume Column-->
+                <% if(device.volume !=null){ %>
+                <td><b><%= device.volume %></b></td>
+                <% } else {%>
+                <td>N/A</td>
+                <% }%>
+                <!--Open/Closed Column-->
+                <% if(device.isOpen==0){ %>
+                <td><b>Closed</b></td>
+                <% } else if(device.isOpen==1){ %>
+                <td><b>Open</b></td>
+                <% } else { %>
+                <td>N/A</td>
+                <% } %>
+                <!--On/Off Column-->
+                <% if(device.isOn==0){ %>
+                <td><b>Off</b></td>
+                <% } else if(device.isOn==1){ %>
+                <td><b>On</b></td>
+                <% } else { %>
+                <td>N/A</td>
+                <% }%>
+            </tr>
+            <%}) %>
+            <% if(count==0) { %>
+            <!--R4B Display a message to the user if not found.-->
+            <tr>
+                <td colspan="7">There's no device registered yet. Add your device <a href="/add-device">here</a></td>
+            </tr>
+            <% } %>
+        </table>
+    </body>
+</html>

@@ -1,14 +1,146 @@
-<!-- R5: Update device status page 
-    - R5A: Display a list of already added devices and then let the user choose a device
-    from the list.Display a link to the home page or a navigation bar that contains links to other pages. 
-    
-    - R5B: Display
-    data related to the chosen device found in the database to users including name, and related settings.As an example,
-    if TV is selected related settings would be on / off setting, volume, and channel.If the heating system is chosen
-    minimum settings, are on / off and temperature, so users can update each field.Collect form data to be passed to the
-    back - end(database) and store updated device status in the database. Display a message indicating the update
-    operation has been done. 
-    
-    - R5C: Improve R5B by automatically hiding input fields that do not apply to the chosen
-    device. - R5D: Going beyond by improving R5B and R5C.Improvement could be achieved by letting the user update device
-    status through a graphical display of the device settings like a dashboard. -->
+
+<!doctype html>
+<html>
+    <head>
+        <title><%= appName %></title>
+    </head>
+    <body>
+        <h1><%= appName %></h1>
+        <nav>
+            <ul>
+                <li><a href="/">TOP</a></li>
+                <li><a href="/about">ABOUT</a></li>
+                <li><a href="/add-device">ADD DEVICE</a></li>
+                <li><a href="/device-status"> DEVICE STATUS</a></li>
+                <li><a href="/select-device-to-update"> UPDATE DEVICE</a></li>
+                <li><a href="/delete-device"> DELETE DEVICE</a></li>
+            </ul>
+        </nav>
+
+        <h2>Update Your Device Settings</h2>
+
+        <!-- R5B: Display data related to the chosen device found in the database to users including name, and related settings.As an example,
+        if TV is selected related settings would be on / off setting, volume, and channel.If the heating system is chosen
+        minimum settings, are on / off and temperature, so users can update each field.-->
+        <form action="/update-device" method="POST" onsubmit="return isFormValid();">
+            <!--ID-->
+            <p>ID: <%= id %></p>
+            <input type="hidden" name="id" value="<%= id %>">
+
+            <!--Device Type-->
+            <p>Device type: <%= deviceType %></p>
+            <input type="hidden" name="deviceType" value="<%= deviceType %>">
+
+            <!--Temperature-->
+            <% if(temperature==null){ %>
+            <% } %><!--R4C: Improve R4B by automatically hiding input fields that do not apply to the chosen device.-->
+            <% if(temperature!=null){ %>
+            <p>Temperature <input id="temperature" type="number" name="temperature" value="0" step="0.1" pattern="^\d*(\.\d{0,2})?$"
+                value="<%= temperature %>" /></p>
+            <% } %>
+
+            <!--Volume-->
+            <% if(volume==null){ %>
+            <% } %><!--R4C: Improve R4B by automatically hiding input fields that do not apply to the chosen device.-->
+            <% if(volume!=null){ %>
+            <p>Volume <input id="volume" type="number" name="volume" value="0" value="<%= volume %>"/></p>
+            <% } %>
+
+            <!--isOpen-->
+            <p>
+                <% if(isOpen==null){ %>
+                <% } %> <!--R4C: Improve R4B by automatically hiding input fields that do not apply to the chosen device.-->
+                <% if(isOpen==0){ %>
+                    <input id="open" type="radio" name="isOpen" value="1"> Open
+                    <input id="closed" type="radio" name="isOpen" value="0" checked> Closed
+                <% } if(isOpen==1){ %>
+                    <input id="open" type="radio" name="isOpen" value="1" checked> Open
+                    <input id="closed" type="radio" name="isOpen" value="0"> Closed
+                <% } %>
+            </p>
+
+            <!--isOn-->
+            <p>
+                <% if(isOn==null) { %>
+                <% } %><!--R4C: Improve R4B by automatically hiding input fields that do not apply to the chosen device.-->
+                <% if(isOn==0) { %>
+                    <input id="on" type="radio" name="isOn" value="1" > ON
+                    <input id="off" type="radio" name="isOn" value="0" checked> OFF
+                <% } %>
+                <% if(isOn==1) { %>
+                    <input id="on" type="radio" name="isOn" value="1" checked> ON
+                    <input id="off" type="radio" name="isOn" value="0"> OFF
+                <% } %>
+            </p>
+
+            <p>
+                <input id="submit-btn" type="button" value="BACK" onclick="window.location='/select-device-to-update'"/>
+                <input id="submit-btn" type="submit" value="UPDATE" />
+            </p>
+        </form>
+        <script>
+            /**
+             * @return: boolean
+             * Checks if all the fields are valid
+            */
+            function isFormValid(){
+                const deviceType = document.getElementById("deviceType").value;
+                // Validate if volume and temperature for the selected device
+                const volumeVal = document.getElementById("volume").value;
+                const temperatureVal = document.getElementById("temperature").value;
+                switch(deviceType)
+                {
+                    case "temp-heater":
+                        if(temperatureVal && (temperatureVal > 50 || temperatureVal < 10))
+                        {
+                            alert("'temperature' must be between 10 to 50.");
+                            return false;
+                            break;
+                        }
+                    case "temp-cooler":
+                        if(temperatureVal && (temperatureVal > 30 || temperatureVal < 0))
+                        {
+                            alert("'temperature' must be between 0 to 30.");
+                            return false;
+                            break;
+                        }
+                    case "car-hustler":
+                    case "car-mercedes":
+                        if(temperatureVal && (temperatureVal > 50 || temperatureVal < 0))
+                        {
+                            alert("'temperature' must be between 0 to 50.");
+                            return false;
+                            break;
+                        }
+                    case "tv-dining":
+                    case "tv-bedroom":
+                    case "google-nest":
+                    case "amazon-alexa":
+                        if(volumeVal && (volumeVal > 100 || volumeVal < 0))
+                        {
+                            alert("'volume' must be between 0 to 100.");
+                            return false;
+                            break;
+                        }
+                }
+
+                // Validate Device Name
+                let $deviceName = document.getElementById("deviceName");
+                // deviceName is free text but is a required field
+                if(!deviceName.value)
+                {
+                    window.alert("Please fill in the device name.");
+                    return false;
+                }
+                // deviceName must be less than 255 bytes
+                if((new TextEncoder().encode(deviceName.value)).length > 255)
+                {
+                    window.alert("The device name is too long");
+                    return false;
+                }
+                // the form gets submitted if true is returned
+                return true;
+            }
+        </script>
+    </body>
+</html>

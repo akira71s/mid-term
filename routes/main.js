@@ -1,146 +1,216 @@
-// C1: Code is organised into JavaScript (.js) files and template files (.html or .ejs or .pug).
-  // - JavaScript files contain web server code(index.js) and middleware(main.js in routes folder). 
-
-
-// C2: Each route in main.js has comments describing purpose, inputs, and outputs
-
+// the app name is an constant
 const APP_NAME = "MySmartHome";
 module.exports = function (app) {
-   // R1: Home Page
-   app.get("/", function (req, res) {
+
+  // GET:/ => renders and return the index page 
+   app.get("/", 
+   function (req, res) {
      res.render("index.html", {
-       appTitle: APP_NAME,
-       // R1A: Display the name of the web application.
-       appName: APP_NAME,
+      appName: APP_NAME
      });
    }); 
   
-  // R2: About page:
+  // GET:/about => renders and returns the TOP page 
   app.get("/about", function (req, res) {
     res.render("about.html", {
-      appTitle: APP_NAME,
-      appName: APP_NAME,
+      appName: APP_NAME
     });
   });
   
-  // R3: Add device page:
+  // GET:/add-device => renders and returns the Add Device page 
   app.get("/add-device", function (req, res) {
     res.render("add-device.html", {
-      appTitle: APP_NAME,
-      appName: APP_NAME,
+      appName: APP_NAME
     });
   });
 
-  //　Add Device to the table: mySmartHomeDevices
+  /** 
+   * POST:/add-device => 
+   *  deals with an INSERT operation into the DB
+   *  then renders and returns the "device-registered" page (which shows a message) 
+   *  after successful DB operation
+   */ 
   app.post("/add-device", function (req, res) {
     const body = req.body;
-    const sqlquery = "INSERT INTO mySmartHomeDevices (deviceName, temperature, volume, isOn, isopen) VALUES (?,?,?,?,?)";
-    const newrecord = [body.deviceName, body.temperature, body.volume, body.isOn, body.isOpen];
-    db.query(sqlquery, newrecord, (err, result) => {
+    // if undefined, set status to "null". It's going to be a flag to show "N/A"
+    if(body.isOpen === undefined) body.isOpen = null;    
+    if(body.isOn === undefined) body.isOn = null;
+    // INSERT device data into table: mySmartHomeDevices
+    const sqlquery = "INSERT INTO mySmartHomeDevices (deviceName, deviceType, temperature, volume, isOn, isopen) VALUES (?,?,?,?,?,?)";
+    const newRecordFields = [body.deviceName, body.deviceType, body.temperature, body.volume, body.isOn, body.isOpen];
+    db.query(sqlquery, newRecordFields, (err, result) => {
       if (err) {
-        return console.error(err.message);
-      } else
-        res.send(" This device is added to database, name: " + body.deviceName);
+        // if error happens, log error info then thros an error
+        console.log(err);
+        throw err;
+      } else {
+        // if the data is saved successfully in the DB, renders and returns a page to show a success message
+        res.render("device-registered.html", {
+          appName: APP_NAME,
+          deviceType: body.deviceType,
+          id: result.insertId
+        });
+      }
     });
   });
 
-  // R4: Show device status page
-  app.get("/device-status", function (req, res) {
+  // GET:/device-status-dashboard => renders and returns the device status dashboard 
+  app.get("/device-status-dashboard", function (req, res) {
+    // Query all the devices from the table 'mySmartHomeDevices'
     let sqlquery = `SELECT * FROM mySmartHomeDevices`
     db.query(sqlquery, (err, result) => {
       if (err) {
+        // if error happens, log error info then thros an error
         console.log(err);
         throw err;
       }
-      console.log(result);
-      res.render("device-status.html", {
-        appTitle: APP_NAME,
+      // renders and returns the dashboard page with data for all the devices 
+      res.render("device-status-dashboard.html", {
         appName: APP_NAME,
         devices: result
       });
     });
   });
 
-  // R5: Update device status page
-  app.get("/update-device", function (req, res) {
-    res.render("update-device.html", {
-      appTitle: APP_NAME,
-      appName: APP_NAME,
+  /**
+   * GET:/select-device-to-update=> renders and returns the device update dashboard 
+   * where they can see all the decices to choose to update 
+   */
+  app.get("/select-device-to-update", function (req, res) {
+    // Query all the devices from the table 'mySmartHomeDevices'
+    let sqlquery = `SELECT * FROM mySmartHomeDevices`
+    db.query(sqlquery, (err, result) => {
+      if (err) {
+        // if error happens, log error info then thros an error
+        console.log(err);
+        throw err;
+      }
+      // renders and returns the dashboard page with data for all the devices, so that users can choose what to update 
+      res.render("select-device-to-update.html", {
+        appName: APP_NAME,
+        devices: result
+      });
     });
   });
 
-  // R6: Delete device page
+  /**
+   * GET:/update-device => renders and returns the device update page 
+   *  for a particular device selected on 'select-device-to-update'
+   */
+  app.get("/update-device", function (req, res) {
+    res.render("update-device.html", {
+      appName: APP_NAME
+    });
+  });
+
+  /** 
+   * POST:/select-device-to-update=> 
+   *  deals with a SELECT operation for a selected device which a user has deviced to update 
+   *  then renders and returns the "update-device" page 
+   *  where uses can edit fields where applicable for the selected device 
+   */ 
+  app.post("/select-device-to-update", function (req, res) {
+    const id = req.body.deviceId;
+    let sqlquery = `SELECT * FROM mySmartHomeDevices WHERE id = ${id}`;
+    db.query(sqlquery, (err, result) => {
+      if (err) {
+        // if error happens, log error info then thros an error
+        console.log(err);
+        throw err;
+      }
+      res.render("update-device.html", {
+        appName: APP_NAME,
+        id: result[0].id,
+        deviceType: result[0].deviceType,
+        temperature: result[0].temperature,
+        volume: result[0].volume,
+        isOn: result[0].isOn,
+        isOpen: result[0].isOpen
+      });
+    });
+  });
+
+  /** 
+   * POST:/update-device => 
+   *  deals with an UPDATE operation
+   *  then renders and returns the "device-registered" page (which shows a message) 
+   *  after successful DB operation
+   */ 
+  app.post("/update-device", function (req, res) {
+    const id = req.body.id;
+    const deviceType = req.body.deviceType;
+    const temperature = req.body.temperature || null;
+    const volume = req.body.volume || null;
+    const isOpen = req.body.isOpen || null;
+    const isOn = req.body.isOn || null ;
+    // UPDATE fields for the device the id of which  is equals to req.body.id
+    let sqlquery = `
+      UPDATE 
+        mySmartHomeDevices 
+      SET 
+        temperature = ${temperature},
+        volume = ${volume},
+        isOpen = ${isOpen},
+        isOn = ${isOn}
+      WHERE 
+        id = ${id}
+    `;
+    db.query(sqlquery, (err, result) => {
+      if (err) {
+        // if error happens, log error info then thros an error
+        console.log(err);
+        throw err;
+      }
+      // renders and returns the device-updated page where uses can see a success message
+      res.render("device-updated.html", {
+        appName: APP_NAME,
+        id: id,
+        deviceType: deviceType
+      });
+    });
+  });
+
+  /**
+   * GET:/delete-device => renders and returns the device delete page 
+   *  where uses can choose which device to be deleted from the DB
+   */
   app.get("/delete-device", function (req, res) {
-    res.render("delete-device.html", {
-      appTitle: APP_NAME,
-      appName: APP_NAME,
+    // SELECT all the devices to list in the page so that uses can choose what to be deleted
+    let sqlquery = `SELECT * FROM mySmartHomeDevices`
+    db.query(sqlquery, (err, result) => {
+      if (err) {
+        // if error happens, log error info then thros an error
+        console.log(err);
+        throw err;
+      }
+      res.render("delete-device.html", {
+        appName: APP_NAME,
+        devices: result
+      });
+    });
+  });
+
+  /** 
+   * POST:/delete-device=> 
+   *  deals with a DELETE operation
+   *  then renders and returns the "device-deleted" page (which shows a message) 
+   *  after successful DB operation
+   */ 
+  app.post("/delete-device", function (req, res) {
+    const id = req.body.deviceId;
+    // DELETE a row for the device the id of which is equals to req.body.deviceId
+    let sqlquery = `DELETE FROM mySmartHomeDevices WHERE id=` + id;
+    db.query(sqlquery, (err, result) => {
+      if(err){
+        // if error happens, log error info then thros an error
+        console.log(err);
+        throw err;
+      }
+      // renders and returns the device-deleted page where uses can see a success message
+      res.render("device-deleted.html", {
+        appName: APP_NAME,
+        id
+      });
     });
   });
 }
-
-// <form method="POST" action="/registered">
-//   <input id="first" type="text" name="first" value="first name" />
-//   <input id="last" type="text" name="last" value="last name" />
-//   <input type="submit" value="OK" />
-// </form>
-
-// app.get("/register", function (req, res) {
-//   res.render("register.html");
-// });
-// app.post("/registered", function (req, res) {
-//   // saving data in database
-//   res.send(req.body)
-// });
-
-
-
-// <form action = "/search-result" method = "GET" >
-//     <input id="search-box" type="text" name="keyword" value="Default">
-//       <input type="submit" value="OK" >
-// </form>
-
-
-// app.get("/search-result", function (req, res) {
-//  //searching in the database
-//  res.send(req.query);
-// });
-
-// DB
-  // mysql
-  // SHOW DATABASES;
-  // CREATE DATABASE myBookshop
-  // USE myBookshop; 
-  // CREATE TABLE books (id INT AUTO_INCREMENT, name VARCHAR(50), price DECIMAL(5, 2) unsigned, PRIMARY KEY(id));
-  // INSERT INTO TableName(name, price) VALUES('database book', 40.25), ('Node.js book',25.00), ('Express book', 31.99); 
-  // DESCRIBE books
-  // SELECT filedName1, fieldName2 FROM TableName; OR SELECT * FROM TableName;
-  // SELECT * FROM TableName LIMIT 2;
-  // SELECT name, price FROM books WHERE id=2;
-
-  // CREATE TABLE dishes (id INT AUTO_INCREMENT, name VARCHAR(50), price
-  //   DECIMAL(5, 2) unsigned, is_vegetarian BOOLEAN, is_vegan BOOLEAN, PRIMARY KEY(id))
-  // SELECT filedName1, fieldName2 FROM TableName; 
-  // UPDATE TableName SET filedName1 = new- value1, fieldName2 = new- value2;
-  // UPDATE books SET price = 25.50 WHERE id = 1
-  // DELETE FROM books WHERE id = 1
-  // exit
-
-
-  // Code style and technique
-// Your code should be written according to the following style and technique guidelines:
-
-
-// C3: Code is laid out clearly with consistent indenting
-// C4: Each database interaction has comments describing the purpose, inputs, and outputs
-// C5: Functions and variables have meaningful names, with a consistent naming style
-
-
-//D1: URL Link to the application environment
-
-//D2: documentation report is in PDF format
-
-//D3: List of requirements: for each sub-requirement (R1A → R6B) state how this was
-  //achieved or if it was not achieved. Explain where it can be found in the code. Use focused,
-  //short code extracts if they make your explanation clearer.
-
-//D4: Database structure: tables including purpose, field names, and data types for each table.

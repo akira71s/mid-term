@@ -1,0 +1,278 @@
+<!doctype html>
+<html>
+    <head>
+        <title><%= appName %></title>
+    </head>
+
+    <body>
+        <h1><%= appName %></h1>        
+        <nav>
+            <ul>
+                <li><a href="/">TOP</a></li>
+                <li><a href="/about">ABOUT</a></li>
+                <li><a href="/add-device">ADD DEVICE</a></li>
+                <li><a href="/device-status-dashboard"> DEVICE STATUS</a></li>
+                <li><a href="/select-device-to-update"> UPDATE DEVICE</a></li>
+                <li><a href="/delete-device"> DELETE DEVICE</a></li>
+            </ul>
+        </nav>
+
+        <h2>Add your smart home device here!</h2>
+
+        <form method="POST" action="/add-device" onsubmit="return onSubmitBtnClick()">
+            <p>Device Name <input id="deviceName" type="text" name="deviceName"/></p>
+            <p> Device Type
+                <select id="deviceType" type="text" name="deviceType" onchange="onDeviceTypeChanged(this)">
+                    <option id="option-placeholder" disabled selected value> -- select an option -- </option>
+                    <optgroup label="Air-Con, Heater, Cooler">
+                        <option value="temp-heater">1.Heater - bedroom</option>
+                        <option value="temp-cooler">2.Cooler - dining</option>
+                        <option value="fan-dyson">3.Fan - Dyson</option>
+                    </optgroup>
+                    <optgroup label="Cars">                    
+                        <option value="car-hustler">4.Car - Suzuki Hustler</option>
+                        <option value="car-mercedes">5.Car - Mercedes</option>
+                    </optgroup>
+                    <optgroup label="TVs">
+                        <option value="tv-dining">6.TV - dining room</option>
+                        <option value="tv-bedroom">7.TV - bedroom</option>
+                    </optgroup>
+                    <optgroup label="Smart Speakers">
+                        <option value="google-nest">8.Google Nest</option>
+                        <option value="amazon-alexa">9.Amazon Alexa</option>
+                    </optgroup>
+                    <optgroup label="Windows">
+                        <option value="window-study">10.Window - study</option>
+                        <option value="window-bedroom">11.Window - bedroom</option>
+                        <option value="window-ktchen">12.Window - kitchen</option>
+                    </optgroup>
+                    <optgroup label="Doors">
+                        <option value="door">13.Door</option>
+                    </optgroup>
+                    <optgroup label="Lights">
+                        <option value="light-study">14.Light - study</option>
+                        <option value="light-bedroom">15.Light - bedroom</option>
+                        <option value="light-dining">16.Light - dining room</option>
+                        <option value="light-poach">17.Light - poach</option>
+                    </optgroup>
+                    <optgroup label="Others">
+                        <option value="kettle">18.Kettle</option>
+                        <option value="winter-carpet">19.Winter carpet</option>
+                        <option value="coffe-machine">20.Coffee machine</option>
+                    </optgroup>
+                </select>
+            </p>
+
+            <p>Temperature <input id="temperature" type="number" name="temperature" value="0" step="0.1" pattern="^\d*(\.\d{0,2})?$" disabled/></p>
+
+            <p>Volume <input id="volume" type="number" name="volume" value="0" disabled /></p>
+
+            <div><p>
+                <input id="open" type="radio" name="isOpen" value="1" checked disabled> Open
+                <input id="closed" type="radio" name="isOpen" value="0" disabled> Closed
+            </p></div>
+
+            <div><p>
+                <input id="on" type="radio" name="isOn" value="1" checked disabled> ON
+                <input id="off" type="radio" name="isOn" value="0" disabled> OFF
+            </p>
+
+            <input id="submit-btn" type="submit" value="OK" onsubmit="return onSubmit();" disabled/>
+        </form>
+    </body>
+    <script>
+        /**
+         * @return: void
+         * @param: ids {Array.<String>}
+         * Enables applicable fields for the selected device 
+         */
+        function enableElements(...ids){
+            ids.forEach(id=>{
+                document.getElementById(id).disabled = false;
+            })
+        }
+        /**
+         * @return: void
+         * @param: ids {Array.<String>}
+         * Disables N/A fields for the selected device
+         */
+        function disableElements(...ids){
+            ids.forEach(id=>{
+                document.getElementById(id).disabled = true;
+            })
+        }
+        /**
+         * @return: void
+         * @param: e {Object} Event object
+         * Calls eableElements or disableElements upon a selected device change 
+         */
+        function onDeviceTypeChanged(e){
+            let $optionEl;
+            switch(e.value){
+                case "temp-heater":
+                case "temp-cooler":
+                    // enabled
+                    enableElements("temperature","on","off");
+                    // disabled
+                    disableElements("volume","open","closed");
+                    break;
+                case "car-hustler":
+                case "car-mercedes":
+                    // enabled
+                    enableElements("temperature", "on", "off", "open", "closed");
+                    // disabled
+                    disableElements("volume");
+                    break;
+                case "tv-dining":
+                case "tv-bedroom":
+                case "google-nest":
+                case "amazon-alexa":
+                    // enabled
+                    enableElements("volume", "on", "off");
+                    // disabled
+                    disableElements("temperature", "open", "closed");
+                    break;
+                case "window-study":
+                case "window-bedroom":
+                case "window-ktchen":
+                case "door":
+                    // enabled
+                    enableElements("open","closed");
+                    // disabled
+                    disableElements("temperature", "on","off","volume");
+                    break;
+                case "light-bedroom":
+                case "light-dining":
+                case "light-poach":
+                case "winter-carpet":
+                case "coffe-machine":
+                case "fan-dyson": 
+                case "kettle":
+                    // enabled
+                    enableElements("on","off");
+                    // disabled
+                    disableElements("temperature", "open", "closed", "volume");
+                    break;
+            }
+            // submit button should be enabled when something is selected
+            document.getElementById("submit-btn").disabled = false;
+        };
+        /**
+         * @return: boolean
+         * Submit event handler
+         */
+        function onSubmitBtnClick(){
+            const fieldIds = ["on", "off", "temperature", "open", "closed", "volume"];
+            // set N/A fields to NULL
+            setUnrelatedFieldsToNull(fieldIds);
+            // validates if each field is vaild  
+            if(isFormValid()==false) return false;
+            // form is submitted when true is returned
+            return true;
+        };
+        /**
+         * @return: void
+         * @param: ids {Array.<String>}
+         * Set N/A fields NULL
+         */
+        function setUnrelatedFieldsToNull(ids){
+            ids.forEach(id=>{
+                let $el = document.getElementById(id);
+                // if a field is disabled, it's not related to the selected device type
+                if($el.disabled == true) $el.value = null;
+            })
+        }
+        /**
+         * @return: boolean
+         * Check if each field is valid
+         */
+        function isFormValid(){
+            // the selected device type
+            const deviceType = document.getElementById("deviceType").value;
+            // Validate if volume and temperature are valid for the selected device type
+            const volumeVal = document.getElementById("volume").value;
+            const temperatureVal = document.getElementById("temperature").value;
+            switch(deviceType){
+                case "temp-heater":
+                    if(temperatureVal && (temperatureVal > 50 || temperatureVal < 10)){
+                        alert("'temperature' must be between 10 to 50.");
+                        return false;
+                        break;
+                    }
+                case "temp-cooler":
+                    if(temperatureVal && (temperatureVal > 30 || temperatureVal < 0)){
+                        alert("'temperature' must be between 0 to 30.");
+                        return false;
+                        break;
+                    }
+                case "car-hustler":
+                case "car-mercedes":
+                    if(temperatureVal && (temperatureVal > 50 || temperatureVal < 0)){
+                        alert("'temperature' must be between 0 to 50.");
+                        return false;
+                        break;
+                    }
+                case "tv-dining":
+                case "tv-bedroom":
+                case "google-nest":
+                case "amazon-alexa":
+                    if(volumeVal && (volumeVal > 100 || volumeVal < 0)){
+                        alert("'volume' must be between 0 to 100.");
+                        return false;
+                        break;
+                    }
+            }
+
+            // Validate Device Name
+            let $deviceName = document.getElementById("deviceName");
+            // deviceName is free text but is a required field
+            if(!deviceName.value){
+                window.alert("Please fill in the device name.");
+                return false;
+            }
+            // deviceName must be less than 255 bytes
+            if((new TextEncoder().encode(deviceName.value)).length > 255){
+                window.alert("The device name is too long");
+                return false;
+            }
+            return true;
+        }
+    </script>
+</html>
+
+<!--
+R3: Add device page:
+- R3A: Display a form to users to add a new device to the database.
+The form should consist of the following items:
+name of the device to be selected 
+from a pre - defined set of devices 
+and other input fields such as on / off, open /
+close, temperature, volume, etc.
+
+Depending on the chosen device other input fields might be applicable or not applicable. 
+The minimum number ofdevices in the pre - defined list is 20. 
+Display a link to the home page or a navigation bar that contains links to other pages.
+
+- R3B: Collect form data to be passed to the back - end(database) and store the device
+ name and its corresponding initial status in the database.
+ Each device item consists of input fields such as name, on / off, open / close, temperature, volume, etc.Some fields
+ might not be applicable for some devices.
+ 
+ As an example, the open / close field is not
+ related to a heating device but applies to a blind or a curtain, or a door.
+ 
+ As another
+ example volume does not apply to the heating system, but the temperature does.Display
+ a message indicating that add device operation has been done successfully.
+
+- R3C: Improve R3B by automatically assigning ‘not applicable’ initial value to the fields
+ that do not apply to the chosen device.It is even better to disable or hide those input
+ fields from users when adding a new device.As an example, if a user adds a new device
+ called ‘heating’ then the minimum required input fields to be displayed and initialised by
+ the user are: on / off and temperature and all other non - related input fields must be
+ initialised to NA(not applicable) status.
+ R3D: Form validation, make sure all required form data is filled and also valid data is
+ entered by user.If required fields are empty or data is not valid, re - display the form to
+ the user with appropriate message to fill it again.As an example, entering a string or a
+ value of 400 is not valid for the temperature of a ‘heating’ device.
+-->
