@@ -3,40 +3,42 @@
 <html>
     <head>
         <title><%= appName %></title>
+        <script src="./js/bootstrap.min.js"></script>
         <link rel="stylesheet" href="./css/bootstrap.min.css">
     </head>
+
     <body>
         <h1><%= appName %></h1>
         <!-- R5A Display a link to the home page or a navigation bar that contains links to other pages. -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText"
-            aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarText">
-            <ul class="navbar-nav mr-auto">
-                <li class="nav-item active">
-                    <a class="nav-link" href="/"> HOME <span class="sr-only"></span></a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/about">ABOUT</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/add-device">REGISTER</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/device-status-dashboard">STATUS</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/select-device-to-update">UPDATE</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/delete-device">DELETE</a>
-                </li>
-            </ul>
-        </div>
-    </nav>
-    <br />
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#nav-contents"
+                aria-controls="nav-contents" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="nav-contents">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="/"> HOME <span class="sr-only"></span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/about">ABOUT</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/add-device">REGISTER</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/device-status-dashboard">STATUS</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/select-device-to-update">UPDATE</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/delete-device">DELETE</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <br />
         <h2>Update Your Device Settings</h2>
             <!--- R5A: Display a list of already added devices and then let the user choose a device from the list.-->
             <!-- R5D: Going beyond by improving R5B and R5C.

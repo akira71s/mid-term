@@ -2,18 +2,20 @@
 <html>
     <head>
         <title><%= appName %></title>
+        <script src="./js/bootstrap.min.js"></script>
         <link rel="stylesheet" href="./css/bootstrap.min.css">
+
     </head>
 
     <body>
         <h1><%= appName %></h1>
         <!-- R4A: Display a link to the home page or a navigation bar that contains links to other pages.-->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText"
-            aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#nav-contents"
+            aria-controls="nav-contents" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
-        <div class="collapse navbar-collapse" id="navbarText">
+        <div class="collapse navbar-collapse" id="nav-contents">
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item active">
                     <a class="nav-link" href="/"> HOME <span class="sr-only"></span></a>
