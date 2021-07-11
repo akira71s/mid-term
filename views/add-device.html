@@ -7,17 +7,36 @@
 
     <body>
         <h1><%= appName %></h1>        
-        <nav>
-            <ul>
-                <li><a href="/">TOP</a></li>
-                <li><a href="/about">ABOUT</a></li>
-                <li><a href="/add-device">ADD DEVICE</a></li>
-                <li><a href="/device-status-dashboard"> DEVICE STATUS</a></li>
-                <li><a href="/select-device-to-update"> UPDATE DEVICE</a></li>
-                <li><a href="/delete-device"> DELETE DEVICE</a></li>
-            </ul>
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <a class="navbar-brand" href="/">MyHomeApp</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText"
+                aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarText">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="/"> HOME</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/about">ABOUT</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/add-device">ADD DEVICE</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/device-status-dashboard">DEVICE STATUS</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/select-device-to-update">UPDATE DEVICE</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/delete-device">DELETE DEVICE</a>
+                    </li>
+                </ul>
+            </div>
         </nav>
-
+        <br/>
         <h2>Add your smart home device here!</h2>
 
         <form method="POST" action="/add-device" onsubmit="return onSubmitBtnClick()">

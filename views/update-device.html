@@ -7,17 +7,36 @@
     </head>
     <body>
         <h1><%= appName %></h1>
-        <nav>
-            <ul>
-                <li><a href="/">TOP</a></li>
-                <li><a href="/about">ABOUT</a></li>
-                <li><a href="/add-device">ADD DEVICE</a></li>
-                <li><a href="/device-status"> DEVICE STATUS</a></li>
-                <li><a href="/select-device-to-update"> UPDATE DEVICE</a></li>
-                <li><a href="/delete-device"> DELETE DEVICE</a></li>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" href="/">MyHomeApp</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText"
+            aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarText">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="/"> HOME </span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/about">ABOUT</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/add-device">ADD DEVICE</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/device-status-dashboard">DEVICE STATUS</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/select-device-to-update">UPDATE DEVICE</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/delete-device">DELETE DEVICE</a>
+                </li>
             </ul>
-        </nav>
-
+        </div>
+    </nav>
+    <br />
         <h2>Update Your Device Settings</h2>
 
         <!-- R5B: Display data related to the chosen device found in the database to users including name, and related settings.As an example,
