@@ -23,8 +23,8 @@
         <form method="POST" action="/add-device" onsubmit="return onSubmitBtnClick()">
             <p>Device Name <input id="deviceName" type="text" name="deviceName"/></p>
 
-            <p style="width:200px;"> Device Type
-                <select class="form-select form-select-sm" id="deviceType" type="text" name="deviceType" onchange="onDeviceTypeChanged(this)">
+            <p> Device Type
+                <select id="deviceType" type="text" name="deviceType" onchange="onDeviceTypeChanged(this)">
                     <option id="option-placeholder" disabled selected value> -- select an option -- </option>
                     <optgroup label="Air-Con, Heater, Cooler">
                         <option value="temp-heater">1.Heater - bedroom</option>

@@ -3,9 +3,11 @@ const express = require("express");
 const app = express();
 const bodyParser = require("body-parser");
 app.use(bodyParser.urlencoded({ extended: true }));
+
 // using bootstrap
 app.use('/css', express.static(__dirname + '/node_modules/bootstrap/dist/css'));
 app.use('/js', express.static(__dirname + '/node_modules/bootstrap/dist/js'))
+
 const port = 8089;
 require("./routes/main")(app);
 
@@ -13,7 +15,7 @@ const mysql = require("mysql");
 const db = mysql.createConnection({
     host: "localhost",
     user: "root",
-    password: "test",
+    password: "",
     database: "myHomeApp"
 });
 

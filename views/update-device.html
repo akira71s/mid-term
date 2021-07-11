@@ -3,6 +3,7 @@
 <html>
     <head>
         <title><%= appName %></title>
+        <link rel="stylesheet" href="./css/bootstrap.min.css">
     </head>
     <body>
         <h1><%= appName %></h1>
@@ -74,8 +75,8 @@
             </p>
 
             <p>
-                <button class="btn btn-secondary" id="submit-btn" type="button" value="BACK" onclick="window.location='/select-device-to-update'"/>
-                <button class="btn btn-primary" id="update-btn" type="submit" value="UPDATE" />
+                <button class="btn btn-secondary" id="submit-btn" type="button" onclick="window.location='/select-device-to-update'">BACK</button>
+                <button class="btn btn-primary" id="update-btn" type="submit">UPDATE</button>
             </p>
         </form>
         <script>
