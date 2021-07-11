@@ -9,7 +9,7 @@ const app = express();
 const bodyParser = require("body-parser");
 app.use(bodyParser.urlencoded({ extended: true }));
 
-const port = 8084;
+const port = 8089;
 require("./routes/main")(app);
 
 const mysql = require("mysql");
