@@ -26,4 +26,4 @@ global.db = db;
 app.set("views", __dirname + "/views");
 app.set("view engine", "ejs");
 app.engine("html", require("ejs").renderFile);
-app.listen(port, () => console.log(`Example app listening on port ${port}! Please go to 'http://localhost:8089' to get started.`));
+app.listen(port, () => console.log(`Example app listening on port ${port}! Please go to 'http://localhost:8089/' to get started.`));
