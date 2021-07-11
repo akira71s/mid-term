@@ -1,8 +1,3 @@
-// CREATE TABLE mySmartHomeDevices(id INT(10) AUTO_INCREMENT, deviceName VARCHAR(32), temperture INT(10), volume INT(10), isOn BOOLEAN, isOpen BOOLEAN, PRIMARY KEY(id));
-
-// C1: Code is organised into JavaScript (.js) files and template files (.html or .ejs or .pug).
-// - JavaScript files contain web server code(index.js) and middleware(main.js in routes folder). 
-
 var http = require("http");
 const express = require("express");
 const app = express();
