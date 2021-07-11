@@ -55,15 +55,15 @@
             <% if(temperature==null){ %>
             <% } %><!--R4C: Improve R4B by automatically hiding input fields that do not apply to the chosen device.-->
             <% if(temperature!=null){ %>
-            <p>Temperature <input id="temperature" type="number" name="temperature" value="0" step="0.1" pattern="^\d*(\.\d{0,2})?$"
-                value="<%= temperature %>" /></p>
+            <p>Temperature <input id="temperature" type="number" name="temperature" step="0.1" pattern="^\d*(\.\d{0,2})?$"
+                value="<%= Number(temperature) %>" /></p>
             <% } %>
 
             <!--Volume-->
             <% if(volume==null){ %>
             <% } %><!--R4C: Improve R4B by automatically hiding input fields that do not apply to the chosen device.-->
             <% if(volume!=null){ %>
-            <p>Volume <input id="volume" type="number" name="volume" value="0" value="<%= volume %>"/></p>
+            <p>Volume <input id="volume" type="number" name="volume" value="<%= Number(volume) %>"/></p>
             <% } %>
 
             <!--isOpen-->

@@ -110,7 +110,7 @@ module.exports = function (app) {
    *  where uses can edit fields where applicable for the selected device 
    */ 
   app.post("/select-device-to-update", function (req, res) {
-    const id = req.body.deviceId;
+    const id = req.body.id;
     let sqlquery = `SELECT * FROM mySmartHomeDevices WHERE id = ${id}`;
     db.query(sqlquery, (err, result) => {
       if (err) {
