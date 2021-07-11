@@ -57,7 +57,7 @@
                     <% count++ %>
                 <tr>
                     <td>
-                        <input name="deviceId" type="radio" 
+                        <input name="deviceId" type="radio" onchange="onRadiochanged()"
                             value="<%= device.id %>" id="<%= device.id %>" />
                     </td>
                     <!--Id Column-->
@@ -103,11 +103,18 @@
                 <% } %>
             </table>
             <br/>
-            <button type='submit' class="btn btn-danger"> DELETE </button>
+            <button type='submit' id="submit-btn" class="btn btn-danger" disabled> DELETE </button>
         </form>
         
 
         <script>
+        /**
+         * @return: void
+         * Enable the delete btn
+        */
+        function onRadiochanged(){
+            document.getElementById("submit-btn").disabled = false;
+        }
         /**
          * @return: boolean
          * Event handler for the form
