@@ -19,7 +19,7 @@ db.connect((err) => {
     if (err) {
         throw err;
     }
-    console.log("Connected to db");
+    // if there's no error, DB is successfully connected
 });
 global.db = db;
 
